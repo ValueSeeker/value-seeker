@@ -5,8 +5,16 @@
 #0583d2
 #61b0b7
 #b8e3ff
+*/
 
-/*
+br
+{
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
 
 /* base styles */
 * {
@@ -41,16 +49,101 @@
   margin: 40px auto;
   padding: 20px;
 }
+.companyinfo{
+  text-indent: 15px;
+  text-align: left;
+}
+.companyinfoprice{
+  text-indent: 15px;
+  font-weight: 400;
+  text-align: left;
+}
+.analysisheading{
+  text-indent: 25px;
+  text-align: left;
+}
+.increasingperc{
+  color: #61b0b7;
+  font-weight: 300;
+}
+.decreasingperc{
+  color: #16558f;
+  font-weight: 300;
+}
+.lefttext{
+  text-align: left;
+}
+.tickersearch {
+  border-radius: 5px;
+  border: 0px solid #000000;
+  background-color: #e9e9e9;
+  width: 225px;
+  height: 35px;
+  text-indent: 20px;
+  font-size: 18px;
+}
+.options {
+  color: #ffffff;
+}
+::placeholder {
 
+}
+
+
+.centerbox {
+  width: 1000px;
+  height: 600px;
+  margin: 0;
+  position: absolute;
+  /* display: flex; */
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  /* background-color: #16558f; */
+}
 .searchbox {
-  width: 15%;
-  height: 400px;
-  display: inline-block;
-  background-color: #b8e3ff;
+  float: left;
+  width: 400px;
+  height: 85%;
+  background-color: #ffffff;
+  border-radius: 25px;
+  border: 2px solid #000000;
+  position: absolute;
   /* box-shadow: 0px 0px 10px #b8e3ff */
 }
 .infobox {
-  width: 300px;
-  height: 400px;
-  display: inline-block;
+  float: right;
+  width: 440px;
+  height: 100%;
+  background-color: #f9f9f9;
+  /* position: center; */
+  border-radius: 25px;
+  
+}
+.displaypart {
+  /* background-color: orange; */
+  height: 90%; 
+  width: 90%;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%,-50%);
+}
+.infoboxseperator {
+  width: 195px;
+  text-align: left;
+  /* text-indent: 25px; */
+}
+.settingsbox {
+  width: 140px;
+  height: 25px;
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: 10px;
+}
+.spacing{
+  width: 25px;
+  height: 1px;
+  background-color: #f9f9f9;
 }
