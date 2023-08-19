@@ -86,6 +86,7 @@ br
   height: 35px;
   text-indent: 20px;
   font-size: 18px;
+  margin-left: 34px;
 }
 .options {
   color: #ffffff;
@@ -151,8 +152,11 @@ br
   background-color: #ffffff;
   border-radius: 25px;
   border: 2px solid #000000;
-  position: relative;
+  position: absolute;
   /* box-shadow: 0px 0px 10px #b8e3ff */
+}
+.searchboxform{
+  align-items: center;
 }
 .infobox {
   float: right;

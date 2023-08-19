@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useFetch from "./useFetch";
 import { Line } from "react-chartjs-2";
 import {Chart as ChartJS} from 'chart.js/auto'
 import formatNumber from "./Utils";
-
+import {useParams} from "react-router-dom";
 
 // var today = moment().format("YYYY-MM-DD");
 // var start = (moment().unix()-2419200);
@@ -33,6 +33,7 @@ const options = {
 };
 
 const Home = () => {
+    const { searchticker } = useParams();
     var api_key = "95cfa265578db4353a576698a3cd6fe2";
     // const [tempTicker, setTempTicker] = useState('');
     const [ticker, setTicker] = useState('');
@@ -60,8 +61,16 @@ const Home = () => {
     const {data: incomeStatement, error3, isPending3} = useFetch("https://financialmodelingprep.com/api/v3/income-statement/"+ticker+"?limit=5&apikey="+api_key);
     const {data: cashFlow, error4, isPending4} = useFetch("https://financialmodelingprep.com/api/v3/cash-flow-statement/"+ticker+"?limit=5&apikey="+api_key);
 
+    useEffect(() => {
+        if (searchticker != undefined) {
+            setTicker(searchticker)
+            // handleSubmit(e)
+        }
+    })
+    
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(typeof e)
         if (isPending1|| isPending2 || ticker == "") {
             return;
         }
@@ -133,13 +142,13 @@ const Home = () => {
             <div className="centerbox">
                 <div className="searchbox">
                     <div className="displaypart">
-                        <form onSubmit={handleSubmit}>
+                        <form className="searchboxform" onSubmit={handleSubmit}>
                             <input 
                                 type="text"
                                 required
                                 value={ticker}
                                 onChange={(e) => setTicker(e.target.value)}
-                                placeholder="Enter Ticker"
+                                placeholder={"Enter Ticker" + searchticker}
                                 className="tickersearch"
                             />
                             <button className="searchbutton" >
