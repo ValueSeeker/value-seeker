@@ -4,6 +4,7 @@ import { Line } from "react-chartjs-2";
 import {Chart as ChartJS} from 'chart.js/auto'
 import formatNumber from "./Utils";
 
+
 // var today = moment().format("YYYY-MM-DD");
 // var start = (moment().unix()-2419200);
 var today = new Date().toISOString().slice(0, 10);
@@ -33,6 +34,7 @@ const options = {
 
 const Home = () => {
     var api_key = "95cfa265578db4353a576698a3cd6fe2";
+    // const [tempTicker, setTempTicker] = useState('');
     const [ticker, setTicker] = useState('');
     const [risk, setRisk] = useState('Low Risk');
     const [debtFin, setDebtFin] = useState(0.3);
@@ -122,6 +124,8 @@ const Home = () => {
             borderColor: percentageC.includes("+") ? "#61b0b7" : "#16558f",
             borderWidth: 2,
         })
+
+        console.log(chartData)
     }
 
     return ( 
@@ -137,8 +141,10 @@ const Home = () => {
                                 onChange={(e) => setTicker(e.target.value)}
                                 placeholder="Enter Ticker"
                                 className="tickersearch"
-                                autoComplete="off"
                             />
+                            <button className="searchbutton" >
+                                <img className="searchimage" src={require('./search_blue.png')}></img>
+                            </button>
                         </form>
                         <br/>
                         <h2 className="companyinfo">{name}</h2>
@@ -152,7 +158,7 @@ const Home = () => {
                         </table>
                         <br/>
                         <div className="chartBox">
-                            {chartData === {} ? <div/> : <Line className = "center" data={chartData} options={{
+                            {!chartData['labels'] ? <div/> : <Line className = "center" data={chartData} options={{
                                 plugins: {
                                     legend: {
                                         display: false,
@@ -194,7 +200,7 @@ const Home = () => {
                                 </td>
                                 <td>
                                     <div className="infoboxseperatorfirst">
-                                        <form onSubmit={handleSubmit}>
+                                        <form>
                                             <p className="settingslabel">Risk Level</p> 
                                             <select
                                                 value={risk}
@@ -242,22 +248,28 @@ const Home = () => {
                             </tr>
                         </table>
                     <br/>
-                    <p className="finalresults"><span className="epvvalue">{EPV}</span> = {EP} * (1/{debtFin}*{costOfDebt}+{equityFin}*{costOfEquity})</p>
-                    <br/>
-                    <h2 className="analysisheading">Valuation</h2>
-                    <br />
-                    <div style={{width: (epvValue > marketCap) ? 275 : (epvValue/marketCap)*275,height:30,backgroundColor:"#0583d2",marginLeft:25,borderRadius:5, float:"left"}}>
-                        <p className="barstext">EPV</p>
-                    </div>
-                    <p className="rightbartext">{EPV}</p>
-                    <br></br>
-                    <div style={{width: (epvValue < marketCap) ? 275 : (marketCap/epvValue)*275,height:30,backgroundColor:"#16558f",marginLeft:25,borderRadius:5, float:"left"}}>
-                        <p className="barstext">Market Cap</p>
-                    </div>
-                    <p className="rightbartext">{"$"+formatNumber(marketCap)}</p>
-                    <br/>
-                    <br/>
-                    <p style={{"fontWeight":600,}}>Conclusion: <span className="resultvalues">{(epvValue > marketCap) ? "Undervalued" : "Overvalued"}</span></p>
+
+                    {
+                        marketCap !== 0 && <div>
+                            <p className="finalresults"><span className="epvvalue">{EPV}</span> = {EP} * (1/{debtFin}*{costOfDebt}+{equityFin}*{costOfEquity})</p>
+                            <br/>
+                            <h2 className="analysisheading">Valuation</h2>
+                            <br />
+                            <div style={{width: (epvValue > marketCap) ? 275 : (epvValue/marketCap)*275,height:30,backgroundColor:"#0583d2",marginLeft:25,borderRadius:5, float:"left"}}>
+                                <p className="barstext">EPV</p>
+                            </div>
+                            <p className="rightbartext">{EPV}</p>
+                            <br></br>
+                            <div style={{width: (epvValue < marketCap) ? 275 : (marketCap/epvValue)*275,height:30,backgroundColor:"#16558f",marginLeft:25,borderRadius:5, float:"left"}}>
+                                <p className="barstext">Market Cap</p>
+                            </div>
+                            <p className="rightbartext">{"$"+formatNumber(marketCap)}</p>
+                            <br/>
+                            <br/>
+                            <p style={{"fontWeight":600,}}>Conclusion: <span className="resultvalues">{(epvValue > marketCap) ? "Undervalued" : "Overvalued"}</span></p>
+                        </div>
+                    }
+                    
                 </div>
             </div>
         </div>
