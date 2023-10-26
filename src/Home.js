@@ -39,8 +39,9 @@ const Home = () => {
     const [risk, setRisk] = useState('Low Risk');
     const [debtFin, setDebtFin] = useState(0.3);
     const [equityFin, setEquityFin] = useState(0.7);
-    const [growthRet, setGrowthRet] = useState(0.25);
-    const [name, setName] = useState('[Enter Ticker]');
+    const [growthRet, setGrowthRet] = useState(1);
+    const [earnRet, setEarnRet] = useState(0);
+    const [name, setName] = useState('[Symbole]');
     const [price, setPrice] = useState('');
     const [exchange, setExchange] = useState('');
     const [percentageC, setPercentageC] = useState('');
@@ -52,6 +53,7 @@ const Home = () => {
     const [chartData, setChartData] = useState({})
     const [epvValue, setEpvValue] = useState(0);
     const [marketCap, setMarketCap] = useState(0);
+    const [showInfo, setShowInfo] = useState(1);
 
     // const newArr = new Array(2);
     // const {data: price, error1, isPending1} = useFetch("https://financialmodelingprep.com/api/v3/quote-short/"+ticker+"?apikey="+api_key);
@@ -59,6 +61,7 @@ const Home = () => {
     const {data: historical, error2, isPending2} = useFetch("https://financialmodelingprep.com/api/v3/historical-price-full/"+ticker+"?from="+start+"&to="+today+"&apikey="+api_key);
     const {data: incomeStatement, error3, isPending3} = useFetch("https://financialmodelingprep.com/api/v3/income-statement/"+ticker+"?limit=5&apikey="+api_key);
     const {data: cashFlow, error4, isPending4} = useFetch("https://financialmodelingprep.com/api/v3/cash-flow-statement/"+ticker+"?limit=5&apikey="+api_key);
+    const {data: balanceSheet, error5, isPending5} = useFetch("https://financialmodelingprep.com/api/v3/balance-sheet-statement/"+ticker+"?limit=5&apikey="+api_key);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -67,9 +70,12 @@ const Home = () => {
         }
 
         console.log("Submitted")
+        
+        var retEarn = ((balanceSheet[0]["retainedEarnings"] - balanceSheet[1]["retainedEarnings"])/incomeStatement[0]["netIncome"]);
+        setEarnRet(retEarn);
 
         if (Object.keys(info).length === 0) {
-            setName("[Invalid Ticker]");
+            setName("[Symbole Invalide]");
             setPrice("");
             setExchange("");
             setPercentageC("")
@@ -100,7 +106,7 @@ const Home = () => {
         var estimatedEBIT = avgRevenue*avgOperatingMargin;
         estimatedEBIT *= (1-avgRateOfTax);
         var estimatedEBITDA = cashFlow[0]["depreciationAndAmortization"] + estimatedEBIT;
-        estimatedEBITDA*=(1-growthRet);
+        estimatedEBITDA*=(1-(retEarn*growthRet));
 
         // console.log(costOfDebt[risk])
         var EPV = estimatedEBITDA / (costOfDebtDict[risk]*debtFin+costOfEquityDict[risk]*(1-debtFin));
@@ -128,7 +134,12 @@ const Home = () => {
         console.log(chartData)
     }
 
-    return ( 
+    function infoClick(e) {
+        console.log("Clicked");
+        setShowInfo(!showInfo);
+    }
+
+    return (      
         <div className="home">
             <div className="centerbox">
                 <div className="searchbox">
@@ -139,7 +150,7 @@ const Home = () => {
                                 required
                                 value={ticker}
                                 onChange={(e) => setTicker(e.target.value)}
-                                placeholder="Enter Ticker"
+                                placeholder="Symbole"
                                 className="tickersearch"
                             />
                             <button className="searchbutton" >
@@ -189,9 +200,13 @@ const Home = () => {
                         
                     </div>
                 </div>
-                <div className="infobox">
+
+                {
+                    showInfo ? <div className="infobox">
                     <br/>
-                    <h1 className="analysisheading">Analysis</h1>
+                    <div className="analysisheadingdiv">
+                        <h1 className="analysisheading">Analyse</h1>
+                    </div>
                     <br/>
                     <table>
                             <tr>
@@ -201,18 +216,18 @@ const Home = () => {
                                 <td>
                                     <div className="infoboxseperatorfirst">
                                         <form>
-                                            <p className="settingslabel">Risk Level</p> 
+                                            <p className="settingslabel">Niveau de risque</p> 
                                             <select
                                                 value={risk}
                                                 className="settingsbox"
                                                 onChange={(e) => setRisk(e.target.value)}>
-                                                <option value="Low Risk" className="options">Low Risk</option>
-                                                <option value="Medium Risk" className="options">Medium Risk</option>
-                                                <option value="High Risk" className="options">High Risk</option>
+                                                <option value="Low Risk" className="options">Faible risque</option>
+                                                <option value="Medium Risk" className="options">Moyen risque</option>
+                                                <option value="High Risk" className="options">Haute risque</option>
                                             </select>
                                             <br/>
                                             <br/>
-                                            <p className="settingslabel">Debt Financing %</p>
+                                            <p className="settingslabel">Financement dettes %</p>
                                             <input 
                                                 type="text" 
                                                 className="settingsbox" 
@@ -223,7 +238,7 @@ const Home = () => {
                                             />
                                             <br/>
                                             <br/>
-                                            <p className="settingslabel">Retained Earnings %</p>
+                                            <p className="settingslabel">Croissance (%)</p>
                                             <input 
                                                 type="text" 
                                                 className="settingsbox" 
@@ -269,8 +284,20 @@ const Home = () => {
                             <p style={{"fontWeight":600,}}>Conclusion: <span className="resultvalues">{(epvValue > marketCap) ? "Undervalued" : "Overvalued"}</span></p>
                         </div>
                     }
+
                     
+
+                    <div className="infobuttondiv"> <button className="infobutton" onClick={infoClick}><i class="fa fa-info"></i></button> </div>                   
+                
+                </div> : <div className="infobox">
+                    <div className="closebuttondiv">
+                        <button className="closebutton" onClick={infoClick}><p>X</p></button>
+                    </div>
                 </div>
+                }
+                
+                
+                
             </div>
         </div>
      );

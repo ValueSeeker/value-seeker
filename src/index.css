@@ -126,6 +126,41 @@ br
   width: 28px;
   height: 28px;
 }
+.infobuttondiv{
+  right:0;
+  bottom:0;
+  /* background-color: #c91a1a; */
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+}
+.infobutton{
+  background-color: #ffffff00;
+  border: 2px solid #000000;
+  border-radius: 100%;
+}
+.infobutton:hover{
+  border: 2px solid #16558f;
+  cursor: pointer;
+}
+.closebuttondiv{
+  right:0;
+  top:0;
+  position:absolute;
+  width:30px;
+  height: 30px;
+  align-items: center;
+}
+.closebutton{
+  margin-top: 15%;
+  background-color: #ffffff00;
+  border: 0px solid #000000;
+  border-radius: 100%;
+}
+.closebutton:hover{
+  background-color: #95bbd3;
+}
 
 ::placeholder {
 
@@ -154,6 +189,10 @@ br
   position: relative;
   /* box-shadow: 0px 0px 10px #b8e3ff */
 }
+.searchbox:hover {
+  background-color: #f9f9f9;
+  border: 2px solid #5d5d5d;
+}
 .infobox {
   float: right;
   width: 440px;
@@ -162,6 +201,9 @@ br
   /* position: center; */
   border-radius: 25px;
   
+}
+.infobox:hover {
+  background-color: #f5f5f5;
 }
 .displaypart {
   /* background-color: orange; */
@@ -192,6 +234,9 @@ br
   border-radius: 10px;
   margin-top: 6px;
   text-indent: 6px;
+}
+.settingsbox:hover {
+  cursor: pointer;
 }
 .spacing{
   width: 25px;
