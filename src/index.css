@@ -93,9 +93,45 @@ br
 .settingslabel{
   font-size: 18px;
   font-weight: 300;
+  display:inline-block;
+}
+.settingslabel .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 3px 0;
+  font-size: 14px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+.settingslabel:hover .tooltiptext{
+  visibility: visible;
 }
 .resultvalues{
   color:#0583d2;
+  display:inline-block;
+}
+.resultvalues .tooltiptext {
+  visibility: hidden;
+  width: 125px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 3px 0;
+  font-size: 14px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+.resultvalues:hover .tooltiptext{
+  visibility: visible;
 }
 .finalresults{
   font-size: 19px;
@@ -128,9 +164,10 @@ br
 }
 .infobuttondiv{
   right:0;
-  bottom:0;
+  /* bottom:0; */
   /* background-color: #c91a1a; */
   position: absolute;
+  margin-top: 10px;
   width: 30px;
   height: 30px;
   align-items: center;
@@ -146,7 +183,7 @@ br
 }
 .closebuttondiv{
   right:0;
-  top:0;
+  /* top:0; */
   position:absolute;
   width:30px;
   height: 30px;
@@ -172,12 +209,31 @@ br
   height: 600px;
   margin: 0;
   position: absolute;
+  /* margin-left: 25%;
+  margin-top: 5%; */
   /* display: flex; */
-  top: 50%;
+  top: 50%; 
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   /* background-color: #16558f; */
+}
+
+@media (max-width: 1000px) {
+  .centerbox {
+    width: 440px;
+    height: 600px;
+    margin: 0;
+    position: absolute;
+    /* margin-left: 25%;
+    margin-top: 5%; */
+    /* display: flex; */
+    top: 50%; 
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    /* background-color: #16558f; */
+  }
 }
 .searchbox {
   float: left;
@@ -188,6 +244,8 @@ br
   border: 2px solid #000000;
   position: relative;
   /* box-shadow: 0px 0px 10px #b8e3ff */
+  margin-right: 1%;
+  margin-bottom:50px;
 }
 .searchbox:hover {
   background-color: #f9f9f9;
@@ -195,12 +253,13 @@ br
 }
 .infobox {
   float: right;
+
   width: 440px;
   height: 100%;
   background-color: #f9f9f9;
   /* position: center; */
   border-radius: 25px;
-  
+  /* margin-right: 80%; */
 }
 .infobox:hover {
   background-color: #f5f5f5;
@@ -244,16 +303,43 @@ br
   background-color: #f9f9f9;
 }
 .chartBox{
-  width: 300px;
-  /* height: 300px; */
-  border-left: 1px solid;
+  /* width: 500px; */
+  /* align-self: center; */
+  height: 250px;
+  /* background-color: aqua; */
+  /* border-left: 1px solid;
   border-bottom: 1px solid;
-  border-color: black;
-  margin: auto;
-  /* width: 50%; */
+  border-color: black; */
+  /* margin: auto; */
+  /* width: 100%; */
 }
 .center {
   
   
   padding: 10px;
 }
+.explanationparagraph{
+  margin-top: 10px;
+  margin-left: 25px;
+  margin-right: 10px;
+
+}
+
+
+.frac {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  letter-spacing: 0.001em;
+  text-align: center;
+}
+.frac > span {
+  display: block;
+  padding: 0.1em;
+}
+.frac span.bottom {
+  border-top: thin solid black;
+}
+.frac span.symbol {
+  display: none;
+} 

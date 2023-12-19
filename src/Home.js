@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useFetch from "./useFetch";
 import { Line } from "react-chartjs-2";
-import {Chart as ChartJS} from 'chart.js/auto'
+// import {Chart as ChartJS} from 'chart.js/auto'
 import formatNumber from "./Utils";
 
 
@@ -65,13 +65,13 @@ const Home = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (isPending1|| isPending2 || ticker == "") {
+        if (isPending1|| isPending2 || ticker === "") {
             return;
         }
 
         console.log("Submitted")
         
-        var retEarn = ((balanceSheet[0]["retainedEarnings"] - balanceSheet[1]["retainedEarnings"])/incomeStatement[0]["netIncome"]);
+        var retEarn = ((balanceSheet[0]["retainedEarnings"] - balanceSheet[1]["retainedEarnings"])/incomeStatement[0]["netIncome"]); // As a percentage
         setEarnRet(retEarn);
 
         if (Object.keys(info).length === 0) {
@@ -104,9 +104,9 @@ const Home = () => {
         avgOperatingMargin/=yearsCount
 
         var estimatedEBIT = avgRevenue*avgOperatingMargin;
-        estimatedEBIT *= (1-avgRateOfTax);
+        // estimatedEBIT *= (1-avgRateOfTax); Don't take tax cuz its not EBIT anymore!
         var estimatedEBITDA = cashFlow[0]["depreciationAndAmortization"] + estimatedEBIT;
-        estimatedEBITDA*=(1-(retEarn*growthRet));
+        estimatedEBITDA*=(1-(earnRet*growthRet));
 
         // console.log(costOfDebt[risk])
         var EPV = estimatedEBITDA / (costOfDebtDict[risk]*debtFin+costOfEquityDict[risk]*(1-debtFin));
@@ -178,23 +178,25 @@ const Home = () => {
                                         }
                                     },
                                     tooltip: {
-                                        enabled: false
+                                        enabled: false,
                                     }
                                 },
                                 scales: {
                                     x: {
-                                        display: false,
+                                        display: true,
 
                                     },
                                     y: {
-                                        display: false
+                                        display: true
                                     }
                                 },
                                 elements: {
                                     point:{
                                         radius: 0
                                     }
-                                }
+                                },
+                                responsive: true,
+                                // maintainAspectRatio: false,
                             }}></Line>}
                         </div>
                         
@@ -227,7 +229,12 @@ const Home = () => {
                                             </select>
                                             <br/>
                                             <br/>
-                                            <p className="settingslabel">Financement dettes %</p>
+                                            <p className="settingslabel">Financement dettes %
+                                                <span className="tooltiptext">
+                                                    % des capitaux provenant de dettes. L'autre % des capitaux proviennent de la vente d'actions. 
+                                                    <br/><br/>Voir COE et COD.
+                                                </span>
+                                            </p>
                                             <input 
                                                 type="text" 
                                                 className="settingsbox" 
@@ -238,7 +245,12 @@ const Home = () => {
                                             />
                                             <br/>
                                             <br/>
-                                            <p className="settingslabel">Croissance (%)</p>
+                                            <p className="settingslabel">Croissance (%)
+                                                <span className="tooltiptext">
+                                                    % du revenu retenu (pas distribué aux actionnaires) réinvesti pour croisser l'entreprise.
+                                                    <br/><br/>Il est normal pour une entreprise de réinvestir 100%
+                                                </span>
+                                            </p>
                                             <input 
                                                 type="text" 
                                                 className="settingsbox" 
@@ -251,13 +263,29 @@ const Home = () => {
                                     </div>
                                 </td>
                                 <td><div className="infoboxseperatorlast">
-                                    <p><span className="resultvalues">EPV: </span>{EPV}</p>
+                                    <p><span className="resultvalues">EPV: 
+                                        <span className="tooltiptext">
+                                            Capacité d'une entreprise à générer du revenu. 
+                                        </span>
+                                    </span>{EPV}</p>
                                     <br/>
-                                    <p><span className="resultvalues">EP: </span>{EP}</p>
+                                    <p><span className="resultvalues">EP: 
+                                    <span className="tooltiptext">
+                                            Estimation des revenus avant intérêts, taxes, dépréciation et amortissement. 
+                                        </span>
+                                    </span>{EP}</p>
                                     <br/>
-                                    <p><span className="resultvalues">COE: </span>{costOfEquity}</p>
+                                    <p><span className="resultvalues">COE: 
+                                        <span className="tooltiptext">
+                                            Taux d'intérêt lors de la vente d'actions pour amasser des fonds.
+                                        </span>
+                                    </span>{costOfEquity}</p>
                                     <br/>
-                                    <p><span className="resultvalues">COD: </span>{costOfDebt}</p>
+                                    <p><span className="resultvalues">COD: 
+                                        <span className="tooltiptext">
+                                            Taux d'intérêt pour emprunter des capitaux (Prédéterminée).
+                                        </span>
+                                    </span>{costOfDebt}</p>
                                     <br/>
                                 </div></td>
                             </tr>
@@ -266,7 +294,13 @@ const Home = () => {
 
                     {
                         marketCap !== 0 && <div>
-                            <p className="finalresults"><span className="epvvalue">{EPV}</span> = {EP} * (1/{debtFin}*{costOfDebt}+{equityFin}*{costOfEquity})</p>
+                            <p className="finalresults"><span className="epvvalue">{EPV}</span> = 
+                                <div className="frac">
+                                    <span>{EP}</span>
+                                    <span class="symbol">/</span>
+                                    <span class="bottom">({debtFin}×{costOfDebt})+({equityFin}×{costOfEquity})</span>
+                                </div>
+                            </p>
                             <br/>
                             <h2 className="analysisheading">Valuation</h2>
                             <br />
@@ -276,12 +310,12 @@ const Home = () => {
                             <p className="rightbartext">{EPV}</p>
                             <br></br>
                             <div style={{width: (epvValue < marketCap) ? 275 : (marketCap/epvValue)*275,height:30,backgroundColor:"#16558f",marginLeft:25,borderRadius:5, float:"left"}}>
-                                <p className="barstext">Market Cap</p>
+                                <p className="barstext">Capitalisation Boursière</p>
                             </div>
                             <p className="rightbartext">{"$"+formatNumber(marketCap)}</p>
                             <br/>
-                            <br/>
-                            <p style={{"fontWeight":600,}}>Conclusion: <span className="resultvalues">{(epvValue > marketCap) ? "Undervalued" : "Overvalued"}</span></p>
+                            {/* <br/> */}
+                            <p style={{"fontWeight":600,}}>Conclusion: <span className="resultvalues">{(epvValue > marketCap) ? "Sous-évaluée" : "Sur-évaluée"}</span></p>
                         </div>
                     }
 
@@ -293,6 +327,37 @@ const Home = () => {
                     <div className="closebuttondiv">
                         <button className="closebutton" onClick={infoClick}><p>X</p></button>
                     </div>
+                    <br/>
+                    <div className="analysisheadingdiv">
+                        <h1 className="analysisheading">Explication</h1>
+                    </div>
+
+                    <p className="explanationparagraph" align="left">
+                        L'investissement de valeur consiste à acheter une entreprise à un prix inférieur à celui indiqué.
+                        <br/><br/>
+                        Pour calculer la valeur d'une entreprise (EPV), il faut appliquer les étapes suivantes:
+                        <br/>
+                        <p align="center">
+                            EPV = <div className="frac">
+                                <span>EP</span>
+                                <span class="symbol">/</span>
+                                <span class="bottom">R</span>
+                            </div>
+                        </p>
+                        <br/><br/>
+                        Où... <br/>
+                        <ul>
+                            <li><b>R</b> est le coût constant futur du capital en %, une moyenne. <br/></li>
+                            <li><b>EP</b> est une estimation des revenus de l'entreprise, calculée en:
+                                <ul>
+                                    <li>Obtenant la marge opérationnelle moyenne des 5 à 10 dernières années.</li>
+                                    <li>Multipliant cette marge par les ventes actuelles.</li>
+                                    <li>Additionnant les coûts de dépréciation et d'amortissement.</li>
+                                    <li>Multipliant le tout par le (% de revenu retenu × % croissance).</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </p>
                 </div>
                 }
                 
