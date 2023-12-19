@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useFetch from "./useFetch";
 import { Line } from "react-chartjs-2";
-// import {Chart as ChartJS} from 'chart.js/auto'
+import {Chart as ChartJS} from 'chart.js/auto'
 import formatNumber from "./Utils";
 
 
@@ -195,7 +195,7 @@ const Home = () => {
                                         radius: 0
                                     }
                                 },
-                                responsive: true,
+                                // responsive: true,
                                 // maintainAspectRatio: false,
                             }}></Line>}
                         </div>
