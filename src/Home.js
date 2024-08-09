@@ -33,7 +33,7 @@ const options = {
 };
 
 const Home = () => {
-    var api_key = "95cfa265578db4353a576698a3cd6fe2";
+    var api_key = "95cfa265578db4353a576698a3cd6fe2"; // public because quick project
     // const [tempTicker, setTempTicker] = useState('');
     const [ticker, setTicker] = useState('');
     const [risk, setRisk] = useState('Low Risk');
